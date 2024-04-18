@@ -1,4 +1,7 @@
 const { snakeToCamel } = require('./helpers');
+const { initConfig } = require('./config');
+
+initConfig();
 
 const inputNames = [
   'REMOTE_HOST', 'REMOTE_USER', 'REMOTE_PORT',

@@ -2,15 +2,18 @@ name: "ssh deploy"
 description: "NodeJS action for FAST deployment with rsync/ssh and remote script execution before/after rsync"
 author: "easingthemes"
 inputs:
+  CONFIG_PATH:
+    description: "config path"
+    required: false
   SSH_PRIVATE_KEY:
     description: "Private key part of an SSH key pair"
-    required: true
+    required: false
   REMOTE_HOST:
     description: "Remote host"
-    required: true
+    required: false
   REMOTE_USER:
     description: "Remote user"
-    required: true
+    required: false
   REMOTE_PORT:
     description: "Remote port"
     required: false

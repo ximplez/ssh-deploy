@@ -5,7 +5,7 @@ const inputConfigKey = 'CONFIG_PATH';
 const inputSshKeyPath = 'SSH_PRIVATE_KEY_PATH';
 
 const readConfig = (configPath) => {
-  if (existsSync(configPath)) {
+  if (!existsSync(configPath)) {
     const message = `⚠️ [FILE] ${configPath} Required file exist.`;
     throw new Error(message);
   }
@@ -20,7 +20,7 @@ const readConfig = (configPath) => {
 };
 
 const readSshKey = (SshKeyPath) => {
-  if (existsSync(SshKeyPath)) {
+  if (!existsSync(SshKeyPath)) {
     const message = `⚠️ [FILE] ${SshKeyPath} Required file exist.`;
     throw new Error(message);
   }

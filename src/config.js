@@ -1,5 +1,4 @@
 const { readFileSync, existsSync } = require('fs');
-const { handleError } = require('./helpers');
 
 const githubWorkspace = process.env.GITHUB_WORKSPACE;
 const inputConfigKey = 'CONFIG_PATH';
@@ -8,7 +7,7 @@ const inputSshKeyPath = 'SSH_PRIVATE_KEY_PATH';
 const readConfig = (configPath) => {
   if (existsSync(configPath)) {
     const message = `⚠️ [FILE] ${configPath} Required file exist.`;
-    handleError(message, true);
+    console.warn(message);
     return null;
   }
   try {
@@ -17,7 +16,7 @@ const readConfig = (configPath) => {
     return JSON.parse(fileContents);
   } catch (error) {
     const message = `⚠️[FILE] reading file error. configPath: ${configPath}, message:  ${error.message}`;
-    handleError(message, true);
+    console.warn(message);
     return null;
   }
 };
@@ -25,7 +24,7 @@ const readConfig = (configPath) => {
 const readSshKey = (SshKeyPath) => {
   if (existsSync(SshKeyPath)) {
     const message = `⚠️ [FILE] ${SshKeyPath} Required file exist.`;
-    handleError(message, true);
+    console.warn(message);
     return null;
   }
   try {
@@ -33,7 +32,7 @@ const readSshKey = (SshKeyPath) => {
     return readFileSync(SshKeyPath, 'utf8');
   } catch (error) {
     const message = `⚠️[FILE] reading file error. configPath: ${SshKeyPath}, message:  ${error.message}`;
-    handleError(message, true);
+    console.warn(message);
     return '';
   }
 };

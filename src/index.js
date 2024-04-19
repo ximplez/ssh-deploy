@@ -4,10 +4,8 @@ const { remoteCmdBefore, remoteCmdAfter } = require('./remoteCmd');
 const { addSshKey, getPrivateKeyPath, updateKnownHosts } = require('./sshKey');
 const { validateRequiredInputs } = require('./helpers');
 const inputs = require('./inputs');
-const { initConfig } = require('./config');
 
 const run = async () => {
-  initConfig();
   const {
     source, remoteUser, remoteHost, remotePort,
     deployKeyName, sshPrivateKey,

@@ -1,5 +1,8 @@
 name: Release
 
+permissions:
+  contents: write
+
 on:
   push:
     branches:
@@ -42,3 +45,12 @@ jobs:
           GIT_COMMITTER_NAME: github-actions
           GIT_COMMITTER_EMAIL: github-actions@github.com
           CI: true
+      - name: Commit dist
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config --global user.email "ximplez@foxmail.com"
+          git config --global user.name "ximplez"
+          git add dist
+          git commit -m 'dist update'
+          git push

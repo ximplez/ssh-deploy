@@ -47,7 +47,7 @@ const initConfig = () => {
         }
       }
     });
-    console.info('⚠️ [initConfig] end. process.env:', JSON.stringify(process.env));
+    console.info('⚠️ [initConfig] end.');
     return;
   }
   console.warn('⚠️ [initConfig] CONFIG_PATH is not defined');

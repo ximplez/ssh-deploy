@@ -7,8 +7,7 @@ const inputSshKeyPath = 'SSH_PRIVATE_KEY_PATH';
 const readConfig = (configPath) => {
   if (existsSync(configPath)) {
     const message = `⚠️ [FILE] ${configPath} Required file exist.`;
-    console.warn(message);
-    return null;
+    throw new Error(message);
   }
   try {
     console.log(`[FILE] reading ${configPath} file ...`);
@@ -16,24 +15,21 @@ const readConfig = (configPath) => {
     return JSON.parse(fileContents);
   } catch (error) {
     const message = `⚠️[FILE] reading file error. configPath: ${configPath}, message:  ${error.message}`;
-    console.warn(message);
-    return null;
+    throw new Error(message);
   }
 };
 
 const readSshKey = (SshKeyPath) => {
   if (existsSync(SshKeyPath)) {
     const message = `⚠️ [FILE] ${SshKeyPath} Required file exist.`;
-    console.warn(message);
-    return null;
+    throw new Error(message);
   }
   try {
     console.log(`[FILE] reading ${SshKeyPath} file ...`);
     return readFileSync(SshKeyPath, 'utf8');
   } catch (error) {
     const message = `⚠️[FILE] reading file error. configPath: ${SshKeyPath}, message:  ${error.message}`;
-    console.warn(message);
-    return '';
+    throw new Error(message);
   }
 };
 

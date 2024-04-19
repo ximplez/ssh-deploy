@@ -1,4 +1,4 @@
-name: "ssh deploy"
+name: "ssh deploy with config"
 description: "NodeJS action for FAST deployment with rsync/ssh and remote script execution before/after rsync"
 author: "easingthemes"
 inputs:

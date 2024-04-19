@@ -39,6 +39,7 @@ const readSshKey = (SshKeyPath) => {
 };
 
 const initConfig = () => {
+  console.info('⚠️ [initConfig] start.');
   const inputValue = process.env[inputConfigKey] || process.env[`INPUT_${inputConfigKey}`];
   if (inputValue) {
     const path = `${githubWorkspace}/${inputValue}`;
@@ -51,6 +52,7 @@ const initConfig = () => {
         }
       }
     });
+    console.info('⚠️ [initConfig] end. process.env:', JSON.stringify(process.env));
     return;
   }
   console.warn('⚠️ [initConfig] CONFIG_PATH is not defined');

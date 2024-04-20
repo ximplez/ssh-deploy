@@ -1,8 +1,12 @@
 const { readFileSync, existsSync } = require('fs');
+const { validateRequiredInputs } = require('./helpers');
 
 const githubWorkspace = process.env.GITHUB_WORKSPACE;
-const inputConfigKey = 'CONFIG_PATH';
-const inputSshKeyPath = 'SSH_PRIVATE_KEY_PATH';
+const SSH_PRIVATE_KEY_PATH = 'SSH_PRIVATE_KEY_PATH';
+
+const DEPLOY_CONFIG_PATH = 'DEPLOY_CONFIG_PATH';
+const SSH_CMD_CONFIG_PATH = 'SSH_CMD_CONFIG_PATH';
+const sshCmdRemoteKey = 'sshCmdRemote';
 
 const readConfig = (configPath) => {
   if (!existsSync(configPath)) {
@@ -34,23 +38,28 @@ const readSshKey = (SshKeyPath) => {
 };
 
 const initConfig = () => {
-  console.info('⚠️ [initConfig] start.');
-  const inputValue = process.env[inputConfigKey] || process.env[`INPUT_${inputConfigKey}`];
-  if (inputValue) {
-    const path = `${githubWorkspace}/${inputValue}`;
-    const conf = readConfig(path);
-    Object.keys(conf).forEach((k) => {
-      if (k && conf[k]) {
-        process.env[k] = conf[k];
-        if (k === inputSshKeyPath) {
-          process.env.SSH_PRIVATE_KEY = readSshKey(conf[k]);
+  console.info('[initConfig] start.');
+  const deployConfigPath = process.env[DEPLOY_CONFIG_PATH] || process.env[`INPUT_${DEPLOY_CONFIG_PATH}`];
+  const sshCmdPath = process.env[SSH_CMD_CONFIG_PATH] || process.env[`INPUT_${SSH_CMD_CONFIG_PATH}`];
+  validateRequiredInputs({ deployConfigPath, sshCmdPath });
+  const deployConfig = readConfig(`${githubWorkspace}/${deployConfigPath}`);
+  const sshCmdConfig = readConfig(`${githubWorkspace}/${sshCmdPath}`);
+  if (deployConfig && deployConfig[sshCmdRemoteKey]
+    && sshCmdConfig && sshCmdConfig[deployConfig[sshCmdRemoteKey]]
+  ) {
+    const sshConfig = sshCmdConfig[deployConfig[sshCmdRemoteKey]];
+    Object.keys(sshConfig).forEach((k) => {
+      if (k && sshConfig[k]) {
+        process.env[k] = sshConfig[k];
+        if (k === SSH_PRIVATE_KEY_PATH) {
+          process.env.SSH_PRIVATE_KEY = readSshKey(sshConfig[k]);
         }
       }
     });
-    console.info('⚠️ [initConfig] end.');
+    console.info('✅ [initConfig] success.');
     return;
   }
-  console.warn('⚠️ [initConfig] CONFIG_PATH is not defined');
+  console.warn(`⚠️ [initConfig] config is not match. sshCmdRemote: ${deployConfig[sshCmdRemoteKey]}`);
 };
 
 module.exports = {

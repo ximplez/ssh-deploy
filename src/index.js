@@ -16,6 +16,7 @@ const run = async () => {
   } = inputs;
   // Validate required inputs
   validateRequiredInputs({ sshPrivateKey, remoteHost, remoteUser });
+  console.log(inputs)
   if (sshBefore) {
     localCmd(sshBefore, true)
   }

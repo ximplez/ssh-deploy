@@ -1,5 +1,6 @@
 const { existsSync, mkdirSync, writeFileSync, unlink } = require('fs');
 const { join } = require('path');
+const { exec } = require('child_process');
 
 const validateDir = (dir) => {
   if (!dir) {

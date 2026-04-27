@@ -29,7 +29,7 @@ const run = async () => {
   // Check Script before
   if (scriptBefore) {
     if (useConfig) {
-      await remoteCmdCfg(scriptBefore, privateKeyPath, scriptBeforeRequired, sshCmdArgs);
+      await remoteCmdCfg(scriptBefore, privateKeyPath, scriptBeforeRequired, sshCmdArgs, cfgKey);
     } else {
       await remoteCmdBefore(scriptBefore, privateKeyPath, scriptBeforeRequired, sshCmdArgs);
     }
@@ -41,7 +41,7 @@ const run = async () => {
   // Check script after
   if (scriptAfter) {
     if (useConfig) {
-      await remoteCmdCfg(scriptBefore, privateKeyPath, scriptBeforeRequired, sshCmdArgs);
+      await remoteCmdCfg(scriptBefore, privateKeyPath, scriptBeforeRequired, sshCmdArgs, cfgKey);
     } else {
       await remoteCmdAfter(scriptAfter, privateKeyPath, scriptAfterRequired, sshCmdArgs);
     }

@@ -12,7 +12,7 @@ const handleError = (message, isRequired, callback) => {
 };
 
 // eslint-disable-next-line max-len
-const remoteCmd = async (content, privateKeyPath, isRequired, label) => new Promise((resolve, reject) => {
+const remoteCmd = async (content, privateKeyPath, isRequired,sshCmdArgs, label) => new Promise((resolve, reject) => {
   const uuid = crypto.randomUUID();
   const filename = `local_ssh_script-${label}-${uuid}.sh`;
   try {
@@ -21,7 +21,7 @@ const remoteCmd = async (content, privateKeyPath, isRequired, label) => new Prom
     const rsyncStdout = (process.env.RSYNC_STDOUT || '').substring(0, dataLimit);
     console.log(`Executing remote script: ssh -i ${privateKeyPath} ${sshServer}`);
     exec(
-      `DEBIAN_FRONTEND=noninteractive ssh -p ${(remotePort || 22)} -i ${privateKeyPath} -o StrictHostKeyChecking=no ${sshServer} 'RSYNC_STDOUT="${rsyncStdout}" bash -s' < ${filename}`,
+      `DEBIAN_FRONTEND=noninteractive ssh -p ${(remotePort || 22)} -i ${privateKeyPath} -o StrictHostKeyChecking=no ${sshCmdArgs} ${sshServer} 'RSYNC_STDOUT="${rsyncStdout}" bash -s' < ${filename}`,
       (err, data = '', stderr = '') => {
         if (err) {
           const message = `⚠️ [CMD] Remote script failed: ${err.message}`;
@@ -40,6 +40,6 @@ const remoteCmd = async (content, privateKeyPath, isRequired, label) => new Prom
 });
 
 module.exports = {
-  remoteCmdBefore: async (cmd, privateKeyPath, isRequired) => remoteCmd(cmd, privateKeyPath, isRequired, 'before'),
-  remoteCmdAfter: async (cmd, privateKeyPath, isRequired) => remoteCmd(cmd, privateKeyPath, isRequired, 'after')
+  remoteCmdBefore: async (cmd, privateKeyPath, isRequired,sshCmdArgs) => remoteCmd(cmd, privateKeyPath, isRequired,sshCmdArgs, 'before'),
+  remoteCmdAfter: async (cmd, privateKeyPath, isRequired,sshCmdArgs) => remoteCmd(cmd, privateKeyPath, isRequired,sshCmdArgs, 'after')
 };

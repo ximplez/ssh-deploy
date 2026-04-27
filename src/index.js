@@ -2,7 +2,7 @@
 const { sshDeploy } = require('./rsyncCli');
 const { remoteCmdBefore, remoteCmdAfter } = require('./remoteCmd');
 const { addSshKey, getPrivateKeyPath, updateKnownHosts } = require('./sshKey');
-const { validateRequiredInputs } = require('./helpers');
+const { validateRequiredInputs,localCmd } = require('./helpers');
 const inputs = require('./inputs');
 
 const run = async () => {
@@ -12,10 +12,13 @@ const run = async () => {
     args, exclude, sshCmdArgs,
     scriptBefore, scriptBeforeRequired,
     scriptAfter, scriptAfterRequired,
-    rsyncServer
+    rsyncServer,sshBefore
   } = inputs;
   // Validate required inputs
   validateRequiredInputs({ sshPrivateKey, remoteHost, remoteUser });
+  if (sshBefore) {
+    localCmd(sshBefore, true)
+  }
   // Add SSH key
   addSshKey(sshPrivateKey, deployKeyName);
   const { path: privateKeyPath } = getPrivateKeyPath(deployKeyName);

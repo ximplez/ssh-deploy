@@ -64,8 +64,32 @@ const validateRequiredInputs = (inputs) => {
 
 const snakeToCamel = (str) => str.replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase());
 
+const localCmd = async (content, isRequired) => new Promise((resolve, reject) => {
+  try {
+    const dataLimit = 10000;
+    console.log(`Executing local script...`);
+    exec(
+      `DEBIAN_FRONTEND=noninteractive ${content}`,
+      (err, data = '', stderr = '') => {
+        if (err) {
+          const message = `⚠️ [CMD] Local script failed: ${err.message}`;
+          console.warn(`${message} \n`, data, stderr);
+          handleError(message, isRequired, reject);
+        } else {
+          const limited = data.substring(0, dataLimit);
+          console.log('✅ [CMD] Local script executed. \n', limited, stderr);
+          resolve(limited);
+        }
+      }
+    );
+  } catch (err) {
+    handleError(err.message, isRequired, reject);
+  }
+});
+
 module.exports = {
   writeToFile,
   validateRequiredInputs,
-  snakeToCamel
+  snakeToCamel,
+  localCmd
 };

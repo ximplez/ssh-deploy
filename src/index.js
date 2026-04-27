@@ -31,7 +31,6 @@ const run = async () => {
   if (scriptBefore) {
     await remoteCmdBefore(scriptBefore, privateKeyPath, scriptBeforeRequired,sshCmdArgs);
   }
-  /* eslint-disable object-property-newline */
   await sshDeploy({
     source, rsyncServer, exclude, remotePort,
     privateKeyPath, args, sshCmdArgs

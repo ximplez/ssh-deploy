@@ -1,4 +1,4 @@
-const { existsSync, mkdirSync, writeFileSync } = require('fs');
+const { existsSync, mkdirSync, writeFileSync, unlink } = require('fs');
 const { join } = require('path');
 
 const validateDir = (dir) => {
@@ -41,6 +41,29 @@ const writeToFile = ({ dir, filename, content, isRequired, mode = '0644' }) => {
     });
   } catch (error) {
     const message = `⚠️[FILE] Writing to file error. filePath: ${filePath}, message:  ${error.message}`;
+    handleError(message, isRequired);
+  }
+};
+
+const deleteFile = ({ dir, filename, isRequired }) => {
+  validateDir(dir);
+  const filePath = join(dir, filename);
+
+  if (existsSync(filePath)) {
+    const message = `⚠️ [FILE] ${filePath} Required file exist.`;
+    handleError(message, isRequired);
+    return;
+  }
+
+  try {
+    console.log(`[FILE] Deleting ${filePath} file ...`);
+    unlink(filePath, (error) => {
+      if (error) {
+        throw new Error(error);
+      }
+    });
+  } catch (error) {
+    const message = `⚠️[FILE] Deleting file error. filePath: ${filePath}, message:  ${error.message}`;
     handleError(message, isRequired);
   }
 };
@@ -89,6 +112,7 @@ const localCmd = async (content, isRequired) => new Promise((resolve, reject) =>
 
 module.exports = {
   writeToFile,
+  deleteFile,
   validateRequiredInputs,
   snakeToCamel,
   localCmd

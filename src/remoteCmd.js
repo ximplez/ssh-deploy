@@ -1,7 +1,7 @@
 const { exec } = require('child_process');
 const crypto = require('crypto');
 const { sshServer, githubWorkspace, remotePort } = require('./inputs');
-const { writeToFile } = require('./helpers');
+const { writeToFile, deleteFile } = require('./helpers');
 
 const handleError = (message, isRequired, callback) => {
   if (isRequired) {
@@ -11,7 +11,6 @@ const handleError = (message, isRequired, callback) => {
   }
 };
 
-// eslint-disable-next-line max-len
 const remoteCmd = async (content, privateKeyPath, isRequired,sshCmdArgs, label) => new Promise((resolve, reject) => {
   const uuid = crypto.randomUUID();
   const filename = `local_ssh_script-${label}-${uuid}.sh`;
@@ -30,6 +29,8 @@ const remoteCmd = async (content, privateKeyPath, isRequired,sshCmdArgs, label) 
         } else {
           const limited = data.substring(0, dataLimit);
           console.log('✅ [CMD] Remote script executed. \n', limited, stderr);
+          deleteFile({ dir: githubWorkspace, filename });
+          console.log('✅ [FILE] Script file deleted.');
           resolve(limited);
         }
       }

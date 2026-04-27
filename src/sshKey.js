@@ -24,11 +24,11 @@ const addSshKey = (content, deployKeyName) => {
   console.log('✅ [SSH] key added to `.ssh` dir ', dir, filename);
 };
 
-const updateKnownHosts = (host, remotePort,sshCmdArgs) => {
+const updateKnownHosts = (host, remotePort) => {
   const { knownHostsPath } = getPrivateKeyPath();
   console.log('[SSH] Adding host to `known_hosts` ....', host, knownHostsPath);
   try {
-    execSync(`ssh-keyscan -p ${(remotePort || 22)} -H ${host} ${sshCmdArgs} >> ${knownHostsPath}`, {
+    execSync(`ssh-keyscan -p ${(remotePort || 22)} -H ${host} >> ${knownHostsPath}`, {
       stdio: 'inherit'
     });
   } catch (error) {

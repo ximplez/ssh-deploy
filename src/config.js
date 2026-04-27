@@ -48,7 +48,7 @@ const initConfig = () => {
     && sshCmdConfig && sshCmdConfig[deployConfig[sshCmdRemoteKey]]
   ) {
     const sshConfig = sshCmdConfig[deployConfig[sshCmdRemoteKey]];
-    process.env[cfgKey] = deployConfig[sshCmdRemoteKey]
+    process.env['cfgKey'] = deployConfig[sshCmdRemoteKey]
     Object.keys(sshConfig).forEach((k) => {
       if (k && sshConfig[k]) {
         process.env[k] = sshConfig[k];

@@ -12,7 +12,7 @@ const run = async () => {
     args, exclude, sshCmdArgs,
     scriptBefore, scriptBeforeRequired,
     scriptAfter, scriptAfterRequired,
-    rsyncServer, sshBefore, useConfig, cfgKey
+    rsyncServer, sshBefore, useConfig, sshConfigKey
   } = inputs;
   // Validate required inputs
   validateRequiredInputs({ sshPrivateKey, remoteHost, remoteUser });
@@ -29,7 +29,7 @@ const run = async () => {
   // Check Script before
   if (scriptBefore) {
     if (useConfig) {
-      await remoteCmdCfg(scriptBefore, privateKeyPath, scriptBeforeRequired, sshCmdArgs, cfgKey);
+      await remoteCmdCfg(scriptBefore, privateKeyPath, scriptBeforeRequired, sshCmdArgs, sshConfigKey);
     } else {
       await remoteCmdBefore(scriptBefore, privateKeyPath, scriptBeforeRequired, sshCmdArgs);
     }
@@ -41,7 +41,7 @@ const run = async () => {
   // Check script after
   if (scriptAfter) {
     if (useConfig) {
-      await remoteCmdCfg(scriptBefore, privateKeyPath, scriptBeforeRequired, sshCmdArgs, cfgKey);
+      await remoteCmdCfg(scriptBefore, privateKeyPath, scriptBeforeRequired, sshCmdArgs, sshConfigKey);
     } else {
       await remoteCmdAfter(scriptAfter, privateKeyPath, scriptAfterRequired, sshCmdArgs);
     }

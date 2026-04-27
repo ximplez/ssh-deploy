@@ -41,7 +41,7 @@ const remoteCmd = async (content, privateKeyPath, isRequired, sshCmdArgs, label)
 });
 
 
-const remoteCmdCfg = async (content, privateKeyPath, isRequired, sshCmdArgs, label) => new Promise((resolve, reject) => {
+const remoteCmdCfg = async (content, isRequired, sshCmdArgs, label) => new Promise((resolve, reject) => {
   const uuid = crypto.randomUUID();
   const filename = `local_ssh_script-${label}-${uuid}.sh`;
   try {

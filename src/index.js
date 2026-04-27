@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 const { sshDeploy } = require('./rsyncCli');
-const { remoteCmdBefore, remoteCmdAfter } = require('./remoteCmd');
+const { remoteCmdBefore, remoteCmdAfter, remoteCmdCfg } = require('./remoteCmd');
 const { addSshKey, getPrivateKeyPath, updateKnownHosts } = require('./sshKey');
 const { validateRequiredInputs, localCmd } = require('./helpers');
 const inputs = require('./inputs');
@@ -12,7 +12,7 @@ const run = async () => {
     args, exclude, sshCmdArgs,
     scriptBefore, scriptBeforeRequired,
     scriptAfter, scriptAfterRequired,
-    rsyncServer, sshBefore
+    rsyncServer, sshBefore, useConfig, cfgKey
   } = inputs;
   // Validate required inputs
   validateRequiredInputs({ sshPrivateKey, remoteHost, remoteUser });
@@ -28,7 +28,11 @@ const run = async () => {
   }
   // Check Script before
   if (scriptBefore) {
-    await remoteCmdBefore(scriptBefore, privateKeyPath, scriptBeforeRequired, sshCmdArgs);
+    if (useConfig) {
+      await remoteCmdCfg(scriptBefore, privateKeyPath, scriptBeforeRequired, sshCmdArgs);
+    } else {
+      await remoteCmdBefore(scriptBefore, privateKeyPath, scriptBeforeRequired, sshCmdArgs);
+    }
   }
   await sshDeploy({
     source, rsyncServer, exclude, remotePort,
@@ -36,7 +40,11 @@ const run = async () => {
   });
   // Check script after
   if (scriptAfter) {
-    await remoteCmdAfter(scriptAfter, privateKeyPath, scriptAfterRequired, sshCmdArgs);
+    if (useConfig) {
+      await remoteCmdCfg(scriptBefore, privateKeyPath, scriptBeforeRequired, sshCmdArgs);
+    } else {
+      await remoteCmdAfter(scriptAfter, privateKeyPath, scriptAfterRequired, sshCmdArgs);
+    }
   }
 };
 

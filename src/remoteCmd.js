@@ -48,9 +48,9 @@ const remoteCmdCfg = async (content, privateKeyPath, isRequired, sshCmdArgs, lab
     writeToFile({ dir: githubWorkspace, filename, content });
     const dataLimit = 10000;
     const rsyncStdout = (process.env.RSYNC_STDOUT || '').substring(0, dataLimit);
-    console.log(`Executing remote script: ssh -i ${privateKeyPath} ${label}`);
+    console.log(`Executing remote script: ssh ${label}`);
     exec(
-      `DEBIAN_FRONTEND=noninteractive ssh ${label} -i ${privateKeyPath} -o StrictHostKeyChecking=no ${sshCmdArgs} 'RSYNC_STDOUT="${rsyncStdout}" bash -s' < ${filename}`,
+      `DEBIAN_FRONTEND=noninteractive ssh ${label} -o StrictHostKeyChecking=no ${sshCmdArgs} 'RSYNC_STDOUT="${rsyncStdout}" bash -s' < ${filename}`,
       (err, data = '', stderr = '') => {
         if (err) {
           const message = `⚠️ [CMD] Remote script failed: ${err.message}`;

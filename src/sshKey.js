@@ -28,7 +28,7 @@ const updateKnownHosts = (host, remotePort) => {
   const { knownHostsPath } = getPrivateKeyPath();
   console.log('[SSH] Adding host to `known_hosts` ....', host, knownHostsPath);
   try {
-    execSync(`ssh-keyscan -p ${(remotePort || 22)} -H ${host} >> ${knownHostsPath}`, {
+    execSync(`ssh-keyscan -v -p ${(remotePort || 22)} -H ${host} >> ${knownHostsPath}`, {
       stdio: 'inherit'
     });
   } catch (error) {
